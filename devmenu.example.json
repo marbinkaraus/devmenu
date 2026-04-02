@@ -1,0 +1,17 @@
+{
+  "categories": [
+    {
+      "name": "Scripts",
+      "commands": [
+        {
+          "label": "Install deps",
+          "command": "bun install"
+        },
+        {
+          "label": "Typecheck",
+          "command": "bun run typecheck"
+        }
+      ]
+    }
+  ]
+}

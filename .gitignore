@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.bun-build
+cli.js
+*.map
+*.log
+devmenu.yaml
+devmenu.json

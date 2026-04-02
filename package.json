@@ -1,0 +1,60 @@
+{
+  "name": "devmenu",
+  "version": "0.1.0",
+  "description": "Terminal UI to pick and run categorized dev commands — built-in Git & General, plus optional devmenu.yaml or JSON merged from the project tree.",
+  "type": "module",
+  "main": "./cli.js",
+  "bin": {
+    "devmenu": "./cli.js"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "cli.js",
+    "devmenu.example.yaml",
+    "devmenu.example.json"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "bun run scripts/build-cli.ts",
+    "prepublishOnly": "bun run build",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "dev": "bun run src/entrypoints/cli.tsx",
+    "devmenu": "bun run src/entrypoints/cli.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marbinkaraus/devmenu.git"
+  },
+  "keywords": [
+    "cli",
+    "command-menu",
+    "developer-tools",
+    "devmenu",
+    "ink",
+    "json",
+    "project",
+    "react",
+    "shell",
+    "terminal",
+    "tui",
+    "yaml"
+  ],
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "@types/bun": "latest",
+    "@types/react": "^18.3.12",
+    "ink": "^5.2.0",
+    "ink-select-input": "^6.0.0",
+    "react": "^18.3.1",
+    "react-devtools-core": "^7.0.1",
+    "typescript": "^5.7.2",
+    "yaml": "^2.8.3"
+  }
+}

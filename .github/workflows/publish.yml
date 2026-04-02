@@ -1,0 +1,42 @@
+# Publish to npm when you push a version tag (e.g. v0.1.0).
+# Add NPM_TOKEN in repo Settings → Secrets (or switch to npm OIDC trusted publishing).
+
+name: Publish npm
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    if: ${{ secrets.NPM_TOKEN != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run check
+
+      - run: bun run typecheck
+
+      - run: bun run build
+
+      - run: node ./cli.js --help
+
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
