@@ -1,15 +1,46 @@
-export const CLI_HELP_TEXT = `devmenu — project command menu
+import { Chalk } from "chalk";
+import { THEME } from "./theme";
 
-  devmenu            Open menu (built-in Git + General; merges devmenu.yaml / .json upward)
-  --version, -v, -V  Print version and exit
+/** Match https://no-color.org/ and typical TTY / FORCE_COLOR behavior. */
+function ansiEnabled(): boolean {
+  const noColor = process.env.NO_COLOR;
+  if (noColor !== undefined && noColor !== "") {
+    return false;
+  }
+  if (process.env.FORCE_COLOR === "0") return false;
+  if (process.env.FORCE_COLOR === "1" || process.env.FORCE_COLOR === "2") {
+    return true;
+  }
+  return Boolean(process.stdout.isTTY);
+}
 
-  Install (npm — published bundle runs on Node 18+, no Bun needed):
-    npm install -g devmenu
+/**
+ * Short `--help` text: purpose, invocation, config pointer, examples.
+ * Accent uses **`THEME.accent`** (same hex as the TUI). Honors NO_COLOR; use FORCE_COLOR=1
+ * when stdout is not a TTY.
+ */
+export function getCliHelpText(): string {
+  const on = ansiEnabled();
+  const chalk = new Chalk({ level: on ? 3 : 0 });
+  const hi = chalk.hex(THEME.accent);
 
-  Develop:
-    bun install && bun run dev
-    bun run build   # emits root cli.js for npm publish
-
-  Optional:
-    DEVMENU_ALT_SCREEN=0   Draw the menu inline under the shell prompt instead of a dedicated screen
-`;
+  const lines = [
+    "",
+    `${hi.bold("devmenu")} ${chalk.dim("— terminal command menu")}`,
+    "",
+    chalk.bold("Usage"),
+    `  ${hi("devmenu")}`,
+    `  ${hi("devmenu -h, --help")}     ${chalk.dim("show this help")}`,
+    `  ${hi("devmenu -v, --version")}  ${chalk.dim("print version")}`,
+    "",
+    chalk.bold("Configuration"),
+    `  ${chalk.dim(
+      "Optional YAML or JSON in a parent directory merges with the default menu.",
+    )}`,
+    `  ${chalk.dim("See")} ${hi("devmenu.example.yaml")} ${chalk.dim("(commented)")} ${chalk.dim("·")} ${hi(
+      "devmenu.example.json",
+    )} ${chalk.dim("·")} ${hi("README.md")}`,
+    "",
+  ];
+  return lines.join("\n");
+}

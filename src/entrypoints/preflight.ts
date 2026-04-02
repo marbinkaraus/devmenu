@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { CLI_HELP_TEXT } from "../constants/help";
+import { getCliHelpText } from "../constants/help";
 
 function findDevmenuPackageJson(): string {
   let dir = dirname(fileURLToPath(import.meta.url));
@@ -44,7 +44,7 @@ export function wantsVersion(argv: string[]): boolean {
 }
 
 export function printCliHelp(): void {
-  console.log(CLI_HELP_TEXT.trimEnd());
+  console.log(getCliHelpText().trimEnd());
 }
 
 export function printVersion(): void {
