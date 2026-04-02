@@ -1,1 +1,1 @@
-export type MenuScreenId = "categories" | "commands";
+export type MenuScreenId = "categories" | "commands" | "command-input";

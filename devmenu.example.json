@@ -5,11 +5,35 @@
       "commands": [
         {
           "label": "Install deps",
+          "description": "Install project dependencies with Bun.",
           "command": "bun install"
         },
         {
           "label": "Typecheck",
+          "description": "Run TypeScript type checks without emitting files.",
           "command": "bun run typecheck"
+        },
+        {
+          "label": "Git commit",
+          "description": "Create a commit with subject/body prompts.",
+          "command": "git commit -m \"{{subject}}\" -m \"{{body}}\"",
+          "inputs": [
+            {
+              "name": "subject",
+              "label": "Commit subject",
+              "placeholder": "feat: short summary",
+              "required": true
+            },
+            {
+              "name": "body",
+              "label": "Commit body",
+              "placeholder": "Explain what changed and why",
+              "multiline": true
+            }
+          ],
+          "confirm": true,
+          "confirmText": "Create commit with the entered message?",
+          "tags": ["git", "commit"]
         }
       ]
     }

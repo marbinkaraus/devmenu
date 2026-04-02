@@ -1,43 +1,62 @@
-import { Box } from "ink";
-import SelectInput from "ink-select-input";
+import { Box, Text } from "ink";
+import { useState } from "react";
 import { HINT_COMMANDS } from "../constants/hints";
-import { Header } from "../ink/Header";
-import { HintRow } from "../ink/HintRow";
-import { ScreenColumn } from "../ink/ScreenColumn";
-import { runCommand } from "../services/runCommand";
+import { THEME } from "../constants/theme";
+import { ScreenShell } from "../ink/components/ScreenShell";
+import { ScrollSelectList } from "../ink/components/ScrollSelectList";
+import { Column } from "../ink/primitives/Column";
+import { MutedText } from "../ink/primitives/MutedText";
+import { Spacing } from "../ink/primitives/Spacing";
 import type { DevMenuCategory } from "../types";
 
-type Item = { label: string; value: string };
-
 type Props = {
-  rootDir: string;
   category: DevMenuCategory;
+  onSelectCommand: (index: number) => void;
 };
 
-export function CommandPickerScreen({ rootDir, category }: Props) {
-  const items: Item[] = category.commands.map((c, i) => ({
+export function CommandPickerScreen({ category, onSelectCommand }: Props) {
+  const commands = category.commands;
+  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const selectedCommand = commands[highlightedIndex] ?? null;
+
+  const items = commands.map((c, i) => ({
+    id: `${i}-${c.label}-${c.command}`,
     label: c.label,
-    value: String(i),
   }));
 
   return (
-    <ScreenColumn>
-      <Header title={category.name} />
-      <HintRow>{HINT_COMMANDS}</HintRow>
-      <Box marginTop={1}>
-        <SelectInput
-          items={items}
-          onSelect={(item) => {
-            const cmd = category.commands[Number(item.value)];
-            if (!cmd) return;
-            const { code, signal } = runCommand(rootDir, cmd);
-            if (signal) {
-              process.exit(1);
-            }
-            process.exit(code === null ? 1 : code);
-          }}
-        />
-      </Box>
-    </ScreenColumn>
+    <ScreenShell
+      title={category.name}
+      bannerTitle
+      titleColor={THEME.banner}
+      description="Choose a command to run."
+      hint={HINT_COMMANDS}
+    >
+      <Column>
+        <Box>
+          <ScrollSelectList
+            items={items}
+            selectedIndex={highlightedIndex}
+            onSelectedIndexChange={setHighlightedIndex}
+            onConfirm={onSelectCommand}
+            emptyMessage="No commands in this category."
+          />
+        </Box>
+        <Spacing size="gap" />
+        <Column>
+          <Text>
+            {selectedCommand?.description?.trim()
+              ? selectedCommand.description
+              : "No description"}
+          </Text>
+          <MutedText italic>
+            command: {selectedCommand?.command ?? "-"}
+          </MutedText>
+          {selectedCommand?.cwd ? (
+            <MutedText italic>cwd: {selectedCommand.cwd}</MutedText>
+          ) : null}
+        </Column>
+      </Column>
+    </ScreenShell>
   );
 }

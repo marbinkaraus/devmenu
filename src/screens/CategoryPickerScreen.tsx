@@ -1,50 +1,46 @@
-import { Box } from "ink";
-import SelectInput from "ink-select-input";
+import { useEffect, useState } from "react";
 import { APP_DISPLAY_NAME } from "../constants/branding";
 import { HINT_CATEGORIES } from "../constants/hints";
 import { THEME } from "../constants/theme";
-import { Header } from "../ink/Header";
-import { HintRow } from "../ink/HintRow";
-import { ScreenColumn } from "../ink/ScreenColumn";
+import { ScreenShell } from "../ink/components/ScreenShell";
+import { ScrollSelectList } from "../ink/components/ScrollSelectList";
 import type { DevMenuCategory } from "../types";
 
-type Item = { label: string; value: string };
-
 type Props = {
-  rootDir: string;
-  configLabel: string;
   categories: DevMenuCategory[];
   onSelectCategory: (category: DevMenuCategory) => void;
 };
 
-export function CategoryPickerScreen({
-  rootDir,
-  configLabel,
-  categories,
-  onSelectCategory,
-}: Props) {
-  const items: Item[] = categories.map((c) => ({
+export function CategoryPickerScreen({ categories, onSelectCategory }: Props) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    setIndex((i) => Math.min(i, Math.max(0, categories.length - 1)));
+  }, [categories.length]);
+
+  const items = categories.map((c, i) => ({
+    id: `${i}-${c.name}`,
     label: c.name,
-    value: c.name,
   }));
 
   return (
-    <ScreenColumn>
-      <Header
-        title={APP_DISPLAY_NAME}
-        subtitle={`${configLabel} · cwd ${rootDir}`}
-        titleColor={THEME.title}
+    <ScreenShell
+      title={APP_DISPLAY_NAME}
+      bannerTitle
+      titleColor={THEME.banner}
+      description="Choose a category of commands."
+      hint={HINT_CATEGORIES}
+    >
+      <ScrollSelectList
+        items={items}
+        selectedIndex={index}
+        onSelectedIndexChange={setIndex}
+        onConfirm={(i) => {
+          const cat = categories[i];
+          if (cat) onSelectCategory(cat);
+        }}
+        emptyMessage="No categories."
       />
-      <HintRow>{HINT_CATEGORIES}</HintRow>
-      <Box marginTop={1}>
-        <SelectInput
-          items={items}
-          onSelect={(item) => {
-            const cat = categories.find((c) => c.name === item.value);
-            if (cat) onSelectCategory(cat);
-          }}
-        />
-      </Box>
-    </ScreenColumn>
+    </ScreenShell>
   );
 }

@@ -9,4 +9,7 @@ export const CLI_HELP_TEXT = `devmenu — project command menu
   Develop:
     bun install && bun run dev
     bun run build   # emits root cli.js for npm publish
+
+  Optional:
+    DEVMENU_ALT_SCREEN=0   Draw the menu inline under the shell prompt instead of a dedicated screen
 `;

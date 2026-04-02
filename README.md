@@ -2,7 +2,7 @@
 
 Terminal UI to pick and run **categorized dev commands** ([Ink](https://github.com/vadimdemedes/ink)). **Git** and **General** are built in; add **`devmenu.yaml`**, **`.devmenu.yaml`**, or JSON variants anywhere above `cwd` in the tree — configs merge with the built-ins.
 
-**Requires Node.js 18+**
+**Requires Node.js 20+**
 
 ## Install
 
@@ -20,7 +20,7 @@ npx devmenu
 devmenu
 ```
 
-- **Enter** — run the highlighted command  
+- **Enter** — select/run the highlighted item  
 - **q** — quit  
 - **Esc** — back (from commands) or quit (from categories)  
 - **b** / **←** — back to categories  
@@ -34,12 +34,34 @@ categories:
   - name: Scripts
     commands:
       - label: Install deps
+        description: Install dependencies for this project
         command: npm install
       - label: Test
+        description: Run all tests
         command: npm test
+      - label: Git commit
+        command: git commit -m "{{subject}}" -m "{{body}}"
+        inputs:
+          - name: subject
+            required: true
+          - name: body
+            multiline: true
+        confirm: true
+        confirmText: Create this commit?
+        tags: [git, commit]
 ```
 
 Same category name as a built-in **appends** commands. See **`devmenu.example.yaml`** and **`devmenu.example.json`** in this repo / package.
+
+Supported command fields:
+
+- `label` (required)
+- `command` (required)
+- `description` (optional; shown in details panel)
+- `cwd` (optional)
+- `confirm` and `confirmText` (optional)
+- `inputs` (optional; template via `{{name}}` in `command` / `cwd`)
+- `tags` (optional; reserved for future search)
 
 ## CLI flags
 

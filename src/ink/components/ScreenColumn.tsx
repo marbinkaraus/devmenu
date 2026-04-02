@@ -1,5 +1,5 @@
-import { Box } from "ink";
 import type { ReactNode } from "react";
+import { Column } from "../primitives/Column";
 
 type Props = {
   children: ReactNode;
@@ -7,5 +7,5 @@ type Props = {
 
 /** Standard full-screen column; adjust spacing tokens here as layouts grow. */
 export function ScreenColumn({ children }: Props) {
-  return <Box flexDirection="column">{children}</Box>;
+  return <Column>{children}</Column>;
 }

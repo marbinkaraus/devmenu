@@ -1,7 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, extname, join, resolve } from "node:path";
 import YAML from "yaml";
-import type { DevMenuCategory, DevMenuCommand } from "../types";
+import type {
+  DevMenuCategory,
+  DevMenuCommand,
+  DevMenuInputSpec,
+} from "../types";
 import { getBuiltInCategories } from "./defaults";
 
 /** First match per directory wins; YAML before JSON if both exist. */
@@ -46,19 +50,75 @@ function parseCategoryList(raw: unknown): DevMenuCategory[] {
     for (const cmd of commands) {
       if (!isRecord(cmd)) continue;
       const label = cmd.label;
+      const description = cmd.description;
       const command = cmd.command;
       if (typeof label !== "string" || !label.trim()) continue;
       if (typeof command !== "string" || !command.trim()) continue;
       const cwd = cmd.cwd;
+      const tags = parseTags(cmd.tags);
+      const inputs = parseInputs(cmd.inputs);
+      const confirm =
+        typeof cmd.confirm === "boolean" ? cmd.confirm : undefined;
+      const confirmText =
+        typeof cmd.confirmText === "string" && cmd.confirmText.trim()
+          ? cmd.confirmText.trim()
+          : undefined;
       cmds.push({
         label: label.trim(),
+        description:
+          typeof description === "string" && description.trim()
+            ? description.trim()
+            : undefined,
         command: command.trim(),
         cwd: typeof cwd === "string" && cwd.trim() ? cwd.trim() : undefined,
+        tags,
+        inputs,
+        confirm,
+        confirmText,
       });
     }
     if (cmds.length) categories.push({ name: name.trim(), commands: cmds });
   }
   return categories;
+}
+
+function parseTags(raw: unknown): string[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const tags = raw
+    .filter((t): t is string => typeof t === "string")
+    .map((t) => t.trim())
+    .filter(Boolean);
+  return tags.length ? tags : undefined;
+}
+
+function parseInputs(raw: unknown): DevMenuInputSpec[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const inputs: DevMenuInputSpec[] = [];
+  for (const entry of raw) {
+    if (!isRecord(entry)) continue;
+    const name = entry.name;
+    if (typeof name !== "string" || !name.trim()) continue;
+    const parsed: DevMenuInputSpec = {
+      name: name.trim(),
+    };
+    if (typeof entry.label === "string" && entry.label.trim()) {
+      parsed.label = entry.label.trim();
+    }
+    if (typeof entry.placeholder === "string" && entry.placeholder.trim()) {
+      parsed.placeholder = entry.placeholder.trim();
+    }
+    if (typeof entry.default === "string") {
+      parsed.default = entry.default;
+    }
+    if (typeof entry.required === "boolean") {
+      parsed.required = entry.required;
+    }
+    if (typeof entry.multiline === "boolean") {
+      parsed.multiline = entry.multiline;
+    }
+    inputs.push(parsed);
+  }
+  return inputs.length ? inputs : undefined;
 }
 
 function cloneCategories(cats: DevMenuCategory[]): DevMenuCategory[] {
