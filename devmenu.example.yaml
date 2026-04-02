@@ -1,3 +1,24 @@
+# devmenu — example project overlay (YAML)
+#
+# This file merges with built-in "Git" and "General" categories from the tool.
+# - New category names add a full category.
+# - Same name as a built-in (case-insensitive) appends commands to that category.
+#
+# Discovery: walk upward from cwd; first directory that contains any of:
+#   devmenu.yaml, devmenu.yml, .devmenu.yaml, .devmenu.yml, devmenu.json, .devmenu.json
+# If both YAML and JSON exist in that directory, YAML is used (first match in the list above).
+#
+# Command fields:
+#   label        (string, required)  — list label
+#   command      (string, required) — shell command; {{inputName}} substituted from inputs
+#   description  (string, optional) — details panel
+#   cwd          (string, optional) — working dir relative to config root or absolute
+#   tags         (string[], optional) — only used for search (s), not shown in lists
+#   confirm      (bool, optional)   — ask before run
+#   confirmText  (string, optional) — custom confirm message
+#   inputs       (array, optional)  — each: name (required), label, placeholder, default,
+#                                     required, multiline
+#
 categories:
   - name: Scripts
     commands:
@@ -13,7 +34,7 @@ categories:
         inputs:
           - name: subject
             label: Commit subject
-            placeholder: feat: short summary
+            placeholder: "feat: short summary"
             required: true
           - name: body
             label: Commit body

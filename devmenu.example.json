@@ -1,4 +1,5 @@
 {
+  "_comment": "Same schema as YAML. Unknown root keys are ignored. For field docs and merge rules, see README.md and devmenu.example.yaml.",
   "categories": [
     {
       "name": "Scripts",

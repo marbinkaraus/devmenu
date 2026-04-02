@@ -48,6 +48,8 @@ type Props = {
   onConfirm: (index: number) => void;
   viewportRows?: number;
   emptyMessage?: string;
+  /** When false, j/k/Enter are not handled (e.g. another control has focus). */
+  listenKeys?: boolean;
 };
 
 /**
@@ -63,6 +65,7 @@ export function ScrollSelectList({
   onConfirm,
   viewportRows = SELECT_LIST_VIEWPORT_ROWS,
   emptyMessage = "No items.",
+  listenKeys = true,
 }: Props) {
   const selectedIndexRef = useRef(0);
   selectedIndexRef.current = selectedIndex;
@@ -74,7 +77,7 @@ export function ScrollSelectList({
   const dimLastRow = windowStart < maxScroll - SCROLL_EPS;
 
   useInput((input, key) => {
-    if (n === 0) return;
+    if (!listenKeys || n === 0) return;
     if (input === "k" || key.upArrow) {
       onSelectedIndexChange(Math.max(0, selectedIndexRef.current - 1));
     }

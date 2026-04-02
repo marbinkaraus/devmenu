@@ -6,7 +6,7 @@ export type DevMenuCommand = {
   command: string;
   /** Working directory relative to project root, or absolute */
   cwd?: string;
-  /** Optional tags for future search/filter capabilities. */
+  /** Optional tags; included in command search (not shown in the list UI). */
   tags?: string[];
   /** Ask for confirmation before running. */
   confirm?: boolean;

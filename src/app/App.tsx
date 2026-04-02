@@ -5,16 +5,20 @@ import { interpretMenuKey } from "../keybindings/menuKeys";
 import { CategoryPickerScreen } from "../screens/CategoryPickerScreen";
 import { CommandInputScreen } from "../screens/CommandInputScreen";
 import { CommandPickerScreen } from "../screens/CommandPickerScreen";
+import { CommandSearchScreen } from "../screens/CommandSearchScreen";
 import { GitCommitScreen } from "../screens/GitCommitScreen";
 import type { MenuScreenId } from "../screens/types";
 import { runCommand } from "../services/runCommand";
 import type { DevMenuCategory } from "../types";
+import type { CommandSearchHit } from "../utils/commandSearch";
 import { getGitCommitInputPair } from "../utils/gitCommitInputPair";
 
 type Props = {
   rootDir: string;
   categories: DevMenuCategory[];
 };
+
+type SearchReturn = "categories" | "commands";
 
 /** Root Ink tree: screen state, command flow, and global key handling. */
 export function App({ rootDir, categories }: Props) {
@@ -32,6 +36,7 @@ export function App({ rootDir, categories }: Props) {
   const [commandSelectedByCategory, setCommandSelectedByCategory] = useState<
     Record<string, number>
   >({});
+  const [searchReturn, setSearchReturn] = useState<SearchReturn>("categories");
 
   useEffect(() => {
     setCategorySelectedIndex((i) =>
@@ -46,11 +51,11 @@ export function App({ rootDir, categories }: Props) {
     setScreen(nextScreen);
   }
 
-  function beginCommandFlow(commandIndex: number) {
-    if (!activeCategory) return;
-    const command = activeCategory.commands[commandIndex];
+  function beginCommandFlow(category: DevMenuCategory, commandIndex: number) {
+    const command = category.commands[commandIndex];
     if (!command) return;
 
+    setActiveCategory(category);
     setActiveCommandIndex(commandIndex);
     setInputIndex(0);
     setInputValues({});
@@ -66,8 +71,41 @@ export function App({ rootDir, categories }: Props) {
     process.exit(code === null ? 1 : code);
   }
 
+  function openSearch(from: SearchReturn) {
+    setSearchReturn(from);
+    setScreen("search");
+  }
+
+  function closeSearch() {
+    setScreen(searchReturn === "categories" ? "categories" : "commands");
+  }
+
+  function pickFromSearch(hit: CommandSearchHit) {
+    beginCommandFlow(hit.category, hit.commandIndex);
+  }
+
   useInput((input, key) => {
-    if (screen === "command-input") {
+    if (screen === "command-input" || screen === "search") {
+      return;
+    }
+    if (
+      (screen === "categories" || screen === "commands") &&
+      input === "s" &&
+      !key.ctrl &&
+      !key.meta &&
+      !key.shift
+    ) {
+      openSearch(screen === "categories" ? "categories" : "commands");
+      return;
+    }
+    if (
+      screen === "commands" &&
+      (input === "b" || key.leftArrow) &&
+      !key.ctrl &&
+      !key.meta
+    ) {
+      setActiveCategory(null);
+      resetCommandFlow("categories");
       return;
     }
     const action = interpretMenuKey(input, key, screen);
@@ -88,7 +126,16 @@ export function App({ rootDir, categories }: Props) {
 
   let screenContent: ReactNode = null;
 
-  if (
+  if (screen === "search") {
+    screenContent = (
+      <CommandSearchScreen
+        categories={categories}
+        onPick={pickFromSearch}
+        onClose={closeSearch}
+        onQuit={exit}
+      />
+    );
+  } else if (
     screen === "command-input" &&
     activeCategory &&
     activeCommandIndex !== null
@@ -186,7 +233,7 @@ export function App({ rootDir, categories }: Props) {
           }));
         }}
         onSelectCommand={(commandIndex) => {
-          beginCommandFlow(commandIndex);
+          beginCommandFlow(activeCategory, commandIndex);
         }}
       />
     );
