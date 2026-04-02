@@ -1,5 +1,5 @@
 import { Box, Text } from "ink";
-import { useState } from "react";
+import { useEffect } from "react";
 import { HINT_COMMANDS } from "../constants/hints";
 import { THEME } from "../constants/theme";
 import { ScreenShell } from "../ink/components/ScreenShell";
@@ -11,13 +11,27 @@ import type { DevMenuCategory } from "../types";
 
 type Props = {
   category: DevMenuCategory;
+  selectedIndex: number;
+  onSelectedIndexChange: (index: number) => void;
   onSelectCommand: (index: number) => void;
 };
 
-export function CommandPickerScreen({ category, onSelectCommand }: Props) {
+export function CommandPickerScreen({
+  category,
+  selectedIndex,
+  onSelectedIndexChange,
+  onSelectCommand,
+}: Props) {
   const commands = category.commands;
-  const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const selectedCommand = commands[highlightedIndex] ?? null;
+
+  useEffect(() => {
+    const max = Math.max(0, commands.length - 1);
+    if (selectedIndex > max) {
+      onSelectedIndexChange(max);
+    }
+  }, [commands.length, selectedIndex, onSelectedIndexChange]);
+
+  const selectedCommand = commands[selectedIndex] ?? null;
 
   const items = commands.map((c, i) => ({
     id: `${i}-${c.label}-${c.command}`,
@@ -36,8 +50,8 @@ export function CommandPickerScreen({ category, onSelectCommand }: Props) {
         <Box>
           <ScrollSelectList
             items={items}
-            selectedIndex={highlightedIndex}
-            onSelectedIndexChange={setHighlightedIndex}
+            selectedIndex={selectedIndex}
+            onSelectedIndexChange={onSelectedIndexChange}
             onConfirm={onSelectCommand}
             emptyMessage="No commands in this category."
           />

@@ -1,5 +1,5 @@
 import { useApp, useInput } from "ink";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { ViewportBottom } from "../ink/components/ViewportBottom";
 import { interpretMenuKey } from "../keybindings/menuKeys";
 import { CategoryPickerScreen } from "../screens/CategoryPickerScreen";
@@ -28,6 +28,16 @@ export function App({ rootDir, categories }: Props) {
   );
   const [inputIndex, setInputIndex] = useState(0);
   const [inputValues, setInputValues] = useState<Record<string, string>>({});
+  const [categorySelectedIndex, setCategorySelectedIndex] = useState(0);
+  const [commandSelectedByCategory, setCommandSelectedByCategory] = useState<
+    Record<string, number>
+  >({});
+
+  useEffect(() => {
+    setCategorySelectedIndex((i) =>
+      Math.min(i, Math.max(0, categories.length - 1)),
+    );
+  }, [categories.length]);
 
   function resetCommandFlow(nextScreen: MenuScreenId = "commands") {
     setActiveCommandIndex(null);
@@ -163,10 +173,18 @@ export function App({ rootDir, categories }: Props) {
       );
     }
   } else if (screen === "commands" && activeCategory) {
+    const commandSelectedIndex =
+      commandSelectedByCategory[activeCategory.name] ?? 0;
     screenContent = (
       <CommandPickerScreen
-        key={activeCategory.name}
         category={activeCategory}
+        selectedIndex={commandSelectedIndex}
+        onSelectedIndexChange={(i) => {
+          setCommandSelectedByCategory((prev) => ({
+            ...prev,
+            [activeCategory.name]: i,
+          }));
+        }}
         onSelectCommand={(commandIndex) => {
           beginCommandFlow(commandIndex);
         }}
@@ -176,6 +194,8 @@ export function App({ rootDir, categories }: Props) {
     screenContent = (
       <CategoryPickerScreen
         categories={categories}
+        selectedIndex={categorySelectedIndex}
+        onSelectedIndexChange={setCategorySelectedIndex}
         onSelectCategory={(cat) => {
           setActiveCategory(cat);
           setScreen("commands");

@@ -1,7 +1,6 @@
 import figures from "figures";
 import { Box, Text, useInput } from "ink";
-import { ScrollList, type ScrollListRef } from "ink-scroll-list";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { SELECT_LIST_VIEWPORT_ROWS } from "../../constants/layout";
 import { THEME } from "../../constants/theme";
 import { MutedText } from "../primitives/MutedText";
@@ -13,6 +12,7 @@ export type ScrollSelectItem = {
   label: string;
 };
 
+/** Continuous scroll offset (same centering math as before). */
 function scrollOffsetForCenteredSelection(
   selectedIndex: number,
   itemCount: number,
@@ -24,23 +24,20 @@ function scrollOffsetForCenteredSelection(
   return Math.max(0, Math.min(target, maxScroll));
 }
 
-function visibleRowRangeUniform(
-  scrollOffset: number,
-  viewportRows: number,
+/** Integer index of the first row shown in the viewport (one line per item). */
+function windowStartIndex(
+  selectedIndex: number,
   itemCount: number,
-): { firstVis: number; lastVis: number } {
-  let firstVis = -1;
-  let lastVis = -1;
-  const viewEnd = scrollOffset + viewportRows;
-  for (let i = 0; i < itemCount; i++) {
-    const top = i;
-    const bottom = i + 1;
-    if (bottom > scrollOffset && top < viewEnd) {
-      if (firstVis < 0) firstVis = i;
-      lastVis = i;
-    }
-  }
-  return { firstVis, lastVis };
+  viewportRows: number,
+): number {
+  if (itemCount <= 0) return 0;
+  const floatStart = scrollOffsetForCenteredSelection(
+    selectedIndex,
+    itemCount,
+    viewportRows,
+  );
+  const maxStart = Math.max(0, itemCount - viewportRows);
+  return Math.max(0, Math.min(maxStart, Math.floor(floatStart + 1e-9)));
 }
 
 type Props = {
@@ -54,7 +51,10 @@ type Props = {
 };
 
 /**
- * Shared vim-style list: j / k and arrows, center scroll, blue pointer, edge dimming.
+ * Vim-style list: j / k and arrows, centered selection, pointer + edge dimming.
+ * Implemented as a fixed viewport slice (no `ink-scroll-list`) so layout never
+ * repaints at scroll 0 then jumps after async measure — that caused wobble when
+ * returning to the picker with a scrolled selection.
  */
 export function ScrollSelectList({
   items,
@@ -64,36 +64,14 @@ export function ScrollSelectList({
   viewportRows = SELECT_LIST_VIEWPORT_ROWS,
   emptyMessage = "No items.",
 }: Props) {
-  const listRef = useRef<ScrollListRef>(null);
   const selectedIndexRef = useRef(0);
   selectedIndexRef.current = selectedIndex;
 
   const n = items.length;
-  const derivedOffset = scrollOffsetForCenteredSelection(
-    selectedIndex,
-    n,
-    viewportRows,
-  );
+  const windowStart = windowStartIndex(selectedIndex, n, viewportRows);
   const maxScroll = Math.max(0, n - viewportRows);
-  const canScrollUp = derivedOffset > SCROLL_EPS;
-  const canScrollDown = derivedOffset < maxScroll - SCROLL_EPS;
-  const { firstVis, lastVis } = visibleRowRangeUniform(
-    derivedOffset,
-    viewportRows,
-    n,
-  );
-  const dimTop = canScrollUp && firstVis >= 0;
-  const dimBottom = canScrollDown && lastVis >= 0;
-
-  useEffect(() => {
-    const onResize = () => {
-      listRef.current?.remeasure();
-    };
-    process.stdout.on("resize", onResize);
-    return () => {
-      process.stdout.off("resize", onResize);
-    };
-  }, []);
+  const dimFirstRow = windowStart > SCROLL_EPS;
+  const dimLastRow = windowStart < maxScroll - SCROLL_EPS;
 
   useInput((input, key) => {
     if (n === 0) return;
@@ -113,17 +91,25 @@ export function ScrollSelectList({
   }
 
   return (
-    <ScrollList
-      ref={listRef}
-      height={viewportRows}
-      selectedIndex={selectedIndex}
-      scrollAlignment="center"
-    >
-      {items.map((item, i) => {
+    <Box flexDirection="column" height={viewportRows}>
+      {Array.from({ length: viewportRows }, (_, r) => {
+        const i = windowStart + r;
+        const edgeDim =
+          (r === 0 && dimFirstRow) || (r === viewportRows - 1 && dimLastRow);
+
+        if (i >= n) {
+          return (
+            <Box key={`empty-row-${i}`} flexDirection="row">
+              <Box marginRight={1}>
+                <Text> </Text>
+              </Box>
+              <Text> </Text>
+            </Box>
+          );
+        }
+
+        const item = items[i];
         const isSelected = i === selectedIndex;
-        const dimTopEdge = dimTop && i === firstVis;
-        const dimBottomEdge = dimBottom && i === lastVis;
-        const edgeDim = dimTopEdge || dimBottomEdge;
         return (
           <Box key={item.id} flexDirection="row">
             <Box marginRight={1}>
@@ -144,6 +130,6 @@ export function ScrollSelectList({
           </Box>
         );
       })}
-    </ScrollList>
+    </Box>
   );
 }
