@@ -1,3 +1,4 @@
+import { runDevmenuInit, wantsInit } from "./initConfig";
 import {
   printCliHelp,
   printVersion,
@@ -19,6 +20,10 @@ if (wantsVersion(process.argv)) {
 if (wantsHelp(process.argv)) {
   printCliHelp();
   process.exit(0);
+}
+
+if (wantsInit(process.argv)) {
+  runDevmenuInit(process.argv, process.cwd());
 }
 
 const { bootstrapMenu } = await import("./bootstrap");

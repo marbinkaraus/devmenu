@@ -33,6 +33,11 @@ export function getCliHelpText(): string {
     `  ${hi("devmenu -h, --help")}     ${chalk.dim("show this help")}`,
     `  ${hi("devmenu -v, --version")}  ${chalk.dim("print version")}`,
     "",
+    chalk.bold("Init"),
+    `  ${hi("devmenu init")}            ${chalk.dim("copy example → devmenu.yaml in cwd")}`,
+    `  ${hi("devmenu init --json")}     ${chalk.dim("… → devmenu.json")}`,
+    `  ${chalk.dim("Add")} ${hi("--force")} ${chalk.dim("to overwrite an existing file")}`,
+    "",
     chalk.bold("Configuration"),
     `  ${chalk.dim(
       "Optional YAML or JSON in a parent directory merges with the default menu.",

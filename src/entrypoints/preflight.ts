@@ -31,6 +31,11 @@ export function getPackageVersion(): string {
   return typeof pkg.version === "string" ? pkg.version : "0.0.0";
 }
 
+/** Directory containing `cli.js`, `package.json`, and shipped `devmenu.example.*` files. */
+export function getDevmenuPackageDir(): string {
+  return dirname(findDevmenuPackageJson());
+}
+
 export function wantsHelp(argv: string[]): boolean {
   const args = argv.slice(2);
   return args.includes("--help") || args.includes("-h");
