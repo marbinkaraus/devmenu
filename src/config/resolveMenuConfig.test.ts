@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from "bun:test";
+import { afterEach, beforeEach, describe, expect, it, spyOn } from "bun:test";
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -182,5 +182,87 @@ describe("resolveMenuConfig", () => {
     const result = resolveMenuConfig(tempDir);
     expect(result.hasConfigFile).toBe(true);
     expect(result.categories[0].name).toBe("Hidden");
+  });
+});
+
+describe("unknown field warnings", () => {
+  it("warns on unknown root-level keys", () => {
+    const warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+    const yaml = `typo_field: true
+categories:
+  - name: OK
+    commands:
+      - label: Go
+        command: echo go
+`;
+    writeFileSync(join(tempDir, "devmenu.yaml"), yaml);
+    resolveMenuConfig(tempDir);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("typo_field"));
+    warnSpy.mockRestore();
+  });
+
+  it("warns on unknown command-level keys", () => {
+    const warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+    const yaml = `categories:
+  - name: Test
+    commands:
+      - label: Go
+        command: echo go
+        desciption: oops
+`;
+    writeFileSync(join(tempDir, "devmenu.yaml"), yaml);
+    resolveMenuConfig(tempDir);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("desciption"));
+    warnSpy.mockRestore();
+  });
+
+  it("warns on unknown category-level keys", () => {
+    const warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+    const yaml = `categories:
+  - name: Test
+    extra: true
+    commands:
+      - label: Go
+        command: echo go
+`;
+    writeFileSync(join(tempDir, "devmenu.yaml"), yaml);
+    resolveMenuConfig(tempDir);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("extra"));
+    warnSpy.mockRestore();
+  });
+
+  it("warns on unknown input-level keys", () => {
+    const warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+    const yaml = `categories:
+  - name: Test
+    commands:
+      - label: Go
+        command: echo {{x}}
+        inputs:
+          - name: x
+            labeel: oops
+`;
+    writeFileSync(join(tempDir, "devmenu.yaml"), yaml);
+    resolveMenuConfig(tempDir);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("labeel"));
+    warnSpy.mockRestore();
+  });
+
+  it("does not warn on _ or $ prefixed keys", () => {
+    const warnSpy = spyOn(console, "warn").mockImplementation(() => {});
+    const json = JSON.stringify({
+      _comment: "ignored",
+      $schema: "also ignored",
+      categories: [
+        {
+          name: "OK",
+          commands: [{ label: "Go", command: "echo go" }],
+        },
+      ],
+    });
+    writeFileSync(join(tempDir, "devmenu.json"), json);
+    resolveMenuConfig(tempDir);
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 });

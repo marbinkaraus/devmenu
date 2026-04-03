@@ -17,6 +17,39 @@ const CONFIG_NAMES = [
   ".devmenu.json",
 ] as const;
 
+const KNOWN_ROOT_KEYS = new Set(["categories"]);
+const KNOWN_CATEGORY_KEYS = new Set(["name", "commands"]);
+const KNOWN_COMMAND_KEYS = new Set([
+  "label",
+  "command",
+  "description",
+  "cwd",
+  "tags",
+  "confirm",
+  "confirmText",
+  "inputs",
+]);
+const KNOWN_INPUT_KEYS = new Set([
+  "name",
+  "label",
+  "placeholder",
+  "default",
+  "required",
+  "multiline",
+]);
+
+function warnUnknownKeys(
+  obj: Record<string, unknown>,
+  known: Set<string>,
+  context: string,
+): void {
+  for (const key of Object.keys(obj)) {
+    if (!known.has(key) && !key.startsWith("_") && !key.startsWith("$")) {
+      console.warn(`devmenu: unknown field "${key}" in ${context} (ignored)`);
+    }
+  }
+}
+
 export type ResolvedConfig = {
   rootDir: string;
   configLabel: string;
@@ -33,6 +66,7 @@ function parseCategoryList(raw: unknown): DevMenuCategory[] {
   if (!isRecord(raw)) {
     throw new Error("Config root must be a mapping (object)");
   }
+  warnUnknownKeys(raw, KNOWN_ROOT_KEYS, "config root");
   const cats = raw.categories;
   if (cats === undefined) {
     return [];
@@ -43,6 +77,8 @@ function parseCategoryList(raw: unknown): DevMenuCategory[] {
   const categories: DevMenuCategory[] = [];
   for (const c of cats) {
     if (!isRecord(c)) continue;
+    const catLabel = typeof c.name === "string" ? c.name : "(unnamed)";
+    warnUnknownKeys(c, KNOWN_CATEGORY_KEYS, `category "${catLabel}"`);
     const name = c.name;
     const commands = c.commands;
     if (typeof name !== "string" || !name.trim()) continue;
@@ -50,6 +86,8 @@ function parseCategoryList(raw: unknown): DevMenuCategory[] {
     const cmds: DevMenuCommand[] = [];
     for (const cmd of commands) {
       if (!isRecord(cmd)) continue;
+      const cmdLabel = typeof cmd.label === "string" ? cmd.label : "(unnamed)";
+      warnUnknownKeys(cmd, KNOWN_COMMAND_KEYS, `command "${cmdLabel}"`);
       const label = cmd.label;
       const description = cmd.description;
       const command = cmd.command;
@@ -97,6 +135,9 @@ function parseInputs(raw: unknown): DevMenuInputSpec[] | undefined {
   const inputs: DevMenuInputSpec[] = [];
   for (const entry of raw) {
     if (!isRecord(entry)) continue;
+    const inputLabel =
+      typeof entry.name === "string" ? entry.name : "(unnamed)";
+    warnUnknownKeys(entry, KNOWN_INPUT_KEYS, `input "${inputLabel}"`);
     const name = entry.name;
     if (typeof name !== "string" || !name.trim()) continue;
     const parsed: DevMenuInputSpec = {
