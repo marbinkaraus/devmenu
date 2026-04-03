@@ -22,21 +22,21 @@ describe("applyInputTemplates", () => {
   });
 
   it("replaces repeated occurrences of the same placeholder", () => {
-    expect(
-      applyInputTemplates("echo {{x}} && echo {{x}}", { x: "hi" }),
-    ).toBe("echo hi && echo hi");
+    expect(applyInputTemplates("echo {{x}} && echo {{x}}", { x: "hi" })).toBe(
+      "echo hi && echo hi",
+    );
   });
 
   it("replaces with empty string when key is missing from values", () => {
-    expect(
-      applyInputTemplates("echo {{missing}}", { other: "val" }),
-    ).toBe("echo ");
+    expect(applyInputTemplates("echo {{missing}}", { other: "val" })).toBe(
+      "echo ",
+    );
   });
 
   it("handles whitespace inside braces", () => {
-    expect(
-      applyInputTemplates("echo {{ name }}", { name: "world" }),
-    ).toBe("echo world");
+    expect(applyInputTemplates("echo {{ name }}", { name: "world" })).toBe(
+      "echo world",
+    );
   });
 
   it("returns source unchanged when values is an empty object", () => {
