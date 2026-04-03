@@ -12,11 +12,11 @@
   </p>
 
   <p>
-    <a href="https://github.com/marbinkaraus/devmenu#installation">📦 Install</a>
-    · <a href="https://github.com/marbinkaraus/devmenu#getting-started">🚀 Getting started</a>
-    · <a href="https://github.com/marbinkaraus/devmenu#features">✨ Features</a>
-    · <a href="https://github.com/marbinkaraus/devmenu#configure-your-menu">⚙️ Configure</a>
-    · <a href="https://github.com/marbinkaraus/devmenu#usage">⌨️ Usage</a>
+    <a href="#installation">📦 Install</a>
+    · <a href="#getting-started">🚀 Getting started</a>
+    · <a href="#features">✨ Features</a>
+    · <a href="#configure-your-menu">⚙️ Configure</a>
+    · <a href="#usage">⌨️ Usage</a>
   </p>
 
 </div>
