@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.0.4](https://github.com/marbinkaraus/devmenu/compare/v1.0.3...v1.0.4) (2026-04-03)
+
+
+### Bug Fixes
+
+* **ci:** use plain v* tags for release-please ([05d1443](https://github.com/marbinkaraus/devmenu/commit/05d1443b5ad86986842c8de24b022efdbf9eaf6f))
+
 ## [1.0.3](https://github.com/marbinkaraus/devmenu/compare/v1.0.2...v1.0.3) (2026-04-03)
 
 ### Added
@@ -49,4 +56,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - `devmenu init` to scaffold starter config from shipped examples.
 - Alternate screen buffer management.
 - `--help` and `--version` CLI flags.
-
