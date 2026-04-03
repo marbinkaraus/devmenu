@@ -1,5 +1,9 @@
 # Publish to npm when you push a version tag (e.g. v0.1.0).
-# Add NPM_TOKEN in repo Settings → Secrets (or switch to npm OIDC trusted publishing).
+#
+# NPM_TOKEN must be a token npm allows for publish with 2FA on the account:
+#   • Granular: Packages → Read/write for this package, or
+#   • Classic → "Automation" (CI; bypasses interactive 2FA for publish).
+# A read-only or "Publish" token without bypass will fail with E403.
 
 name: Publish npm
 
@@ -28,7 +32,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
-          registry-url: "https://registry.npmjs.org"
+
+      # Avoid setup-node registry-url (it sets deprecated always-auth in .npmrc).
+      - name: npm auth for publish
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - run: bun install --frozen-lockfile
 
@@ -41,5 +50,3 @@ jobs:
       - run: node ./cli.js --help
 
       - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
