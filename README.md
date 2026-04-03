@@ -36,13 +36,13 @@
 ## Demo
 
 <p align="center">
-  <video src="media/demo.mov" controls muted playsinline width="720">
-    <a href="media/demo.mov">Play demo.mov</a>
+  <video src="media/demo.mp4" controls muted playsinline width="720">
+    <a href="media/demo.mp4">Play demo.mp4</a>
   </video>
 </p>
 
 <p align="center">
-  <a href="media/demo.mov"><code>media/demo.mov</code></a> — if the player doesn’t load, open or download the file.
+  <a href="media/demo.mp4"><code>media/demo.mp4</code></a> — if the player doesn't load, open or download the file.
 </p>
 
 ## Features
