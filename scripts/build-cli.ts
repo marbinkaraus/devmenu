@@ -11,6 +11,13 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outfile = join(root, "cli.js");
 
+/**
+ * `cfonts` (used by `ink-big-text`) reads font definitions from its package on disk.
+ * Bundling it breaks that; keep it external so `require("cfonts")` resolves from
+ * `node_modules` after `npm install devmenu`.
+ */
+const external = ["cfonts"];
+
 const r = spawnSync(
   "bun",
   [
@@ -20,6 +27,7 @@ const r = spawnSync(
     "--production",
     "--outfile",
     outfile,
+    ...external.flatMap((pkg) => ["--external", pkg]),
   ],
   { stdio: "inherit", cwd: root },
 );
