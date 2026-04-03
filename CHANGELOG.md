@@ -6,11 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-04-03
+
 ### Added
 - Test suite with `bun test` for core modules (config, search, templates).
 - Config parser now warns on unrecognized fields to help catch typos.
 - `CONTRIBUTING.md` for new contributors.
-- This changelog.
+- `CHANGELOG.md`.
+- Publish workflow now auto-creates GitHub releases on tag push.
 
 ### Fixed
 - README images now render correctly on npmjs.com (absolute URLs).
@@ -49,7 +52,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - Alternate screen buffer management.
 - `--help` and `--version` CLI flags.
 
-[Unreleased]: https://github.com/marbinkaraus/devmenu/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/marbinkaraus/devmenu/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/marbinkaraus/devmenu/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/marbinkaraus/devmenu/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/marbinkaraus/devmenu/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/marbinkaraus/devmenu/releases/tag/v1.0.0
