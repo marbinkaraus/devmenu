@@ -1,39 +1,42 @@
-# Releasing devmenu (Claude Code–style)
+# Releasing devmenu
 
 This repo ships a **single bundled `cli.js`**, `bin` → that file, **`engines.node`**, and four runtime `dependencies` (`cfonts`, `chalk`, `figures`, `ink-text-input`) that cannot be inlined by the bundler. **`prepublishOnly` runs `bun run build`**, which emits **`cli.js`** with a **`#!/usr/bin/env node`** shebang.
+
+## How releases work
+
+Releases are automated via [release-please](https://github.com/googleapis/release-please).
+
+1. **Push commits to `main`** using [conventional commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `chore:`, etc.).
+2. **release-please** opens (or updates) a **Release PR** that bumps `package.json`, updates `CHANGELOG.md`, and shows you what will ship.
+3. **Merge the Release PR** when you're ready. release-please creates a version tag (`v1.0.4`) and a GitHub release.
+4. The **tag triggers `publish.yml`** which builds, checks, and runs `npm publish`.
+
+That's it — no manual `npm version` or `git tag` needed.
+
+### Commit types → version bumps
+
+| Prefix | Bump | Example |
+|--------|------|---------|
+| `fix:` | patch | `fix: prevent q from quitting in search` |
+| `feat:` | minor | `feat: add --config flag` |
+| `feat!:` or `BREAKING CHANGE:` | major | `feat!: require Node 22` |
+| `chore:`, `docs:`, `test:`, `ci:` | none | Only included in changelog, no version bump |
 
 ## One-time setup
 
 1. [Create an npm account](https://www.npmjs.com/signup) and log in: `npm login`.
-2. If you use a **scoped** package name later, ensure the name in `package.json` matches and you have publish rights.
+2. Set **`NPM_TOKEN`** in GitHub repo secrets (granular automation token or OIDC).
 
-## Version bump
+## Manual publish (fallback)
 
-```bash
-npm version patch   # or minor / major
-```
-
-That updates `package.json`, creates a git tag (`v0.1.1`, etc.).
-
-## Publish to npm
-
-From a machine with **Bun** (only needed to **build**; consumers only need Node):
+If CI is unavailable:
 
 ```bash
 bun install
+bun run check
+bun run typecheck
+bun run build && node ./cli.js --help
 npm publish
 ```
 
-`prepublishOnly` runs `bun run build`, which writes **`cli.js`**. npm packs **`files`** from `package.json` (`cli.js` + examples). **Do not commit `cli.js`**; it is gitignored and built at publish time.
-
-### CI publish (optional)
-
-Set **`NPM_TOKEN`** in GitHub repo secrets. Pushing a tag `v*` can run `npm publish` in Actions (see `.github/workflows/publish.yml`). Use **trusted publishing** (OIDC) or a granular automation token per npm docs.
-
-## Checklist
-
-- [ ] `bun run check`
-- [ ] `bun run typecheck`
-- [ ] `bun run build && node ./cli.js --help`
-- [ ] `npm version …` and push tags
-- [ ] `npm publish` (or tag-driven CI)
+**Do not commit `cli.js`**; it is gitignored and built at publish time.
