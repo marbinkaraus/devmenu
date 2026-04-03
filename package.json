@@ -1,6 +1,6 @@
 {
   "name": "devmenu",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A terminal UI to browse and run categorized shell commands, search the whole list, and keep everything in one place instead of hunting through package.json, readmes, and random docs.",
   "author": "Marbin Karaus (https://github.com/marbinkaraus)",
   "homepage": "https://github.com/marbinkaraus/devmenu",
