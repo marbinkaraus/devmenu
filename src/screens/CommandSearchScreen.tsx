@@ -78,7 +78,7 @@ export function CommandSearchScreen({
       onClose();
       return;
     }
-    if (_input === "q") {
+    if (_input === "q" && focus === "list") {
       onQuit();
       return;
     }
