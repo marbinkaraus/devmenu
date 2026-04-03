@@ -20,7 +20,7 @@ export function interpretMenuKey(
     if (screen === "commands") {
       return { type: "back-to-categories" };
     }
-    if (screen === "command-input") {
+    if (screen === "command-input" || screen === "confirm-command") {
       return { type: "cancel-command-flow" };
     }
     return { type: "quit" };

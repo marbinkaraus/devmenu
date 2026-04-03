@@ -6,9 +6,10 @@ import { CategoryPickerScreen } from "../screens/CategoryPickerScreen";
 import { CommandInputScreen } from "../screens/CommandInputScreen";
 import { CommandPickerScreen } from "../screens/CommandPickerScreen";
 import { CommandSearchScreen } from "../screens/CommandSearchScreen";
+import { ConfirmCommandScreen } from "../screens/ConfirmCommandScreen";
 import { GitCommitScreen } from "../screens/GitCommitScreen";
 import type { MenuScreenId } from "../screens/types";
-import { runCommand } from "../services/runCommand";
+import { applyInputTemplates, runCommand } from "../services/runCommand";
 import type { DevMenuCategory } from "../types";
 import type { CommandSearchHit } from "../utils/commandSearch";
 import { getGitCommitInputPair } from "../utils/gitCommitInputPair";
@@ -64,6 +65,10 @@ export function App({ rootDir, categories }: Props) {
       setScreen("command-input");
       return;
     }
+    if (command.confirm) {
+      setScreen("confirm-command");
+      return;
+    }
     const { code, signal } = runCommand(rootDir, command);
     if (signal) {
       process.exit(1);
@@ -85,7 +90,11 @@ export function App({ rootDir, categories }: Props) {
   }
 
   useInput((input, key) => {
-    if (screen === "command-input" || screen === "search") {
+    if (
+      screen === "command-input" ||
+      screen === "confirm-command" ||
+      screen === "search"
+    ) {
       return;
     }
     if (
@@ -208,6 +217,11 @@ export function App({ rootDir, categories }: Props) {
               setInputIndex(nextIndex);
               return;
             }
+            if (activeCommand.confirm) {
+              setInputValues(nextValues);
+              setScreen("confirm-command");
+              return;
+            }
             const { code, signal } = runCommand(rootDir, activeCommand, {
               inputValues: nextValues,
             });
@@ -219,6 +233,32 @@ export function App({ rootDir, categories }: Props) {
         />
       );
     }
+  } else if (
+    screen === "confirm-command" &&
+    activeCategory &&
+    activeCommandIndex !== null
+  ) {
+    const cmd = activeCategory.commands[activeCommandIndex];
+    if (!cmd) {
+      return null;
+    }
+    const rendered = applyInputTemplates(cmd.command, inputValues);
+    screenContent = (
+      <ConfirmCommandScreen
+        renderedCommand={rendered}
+        confirmText={cmd.confirmText}
+        onCancel={resetCommandFlow}
+        onConfirm={() => {
+          const { code, signal } = runCommand(rootDir, cmd, {
+            inputValues,
+          });
+          if (signal) {
+            process.exit(1);
+          }
+          process.exit(code === null ? 1 : code);
+        }}
+      />
+    );
   } else if (screen === "commands" && activeCategory) {
     const commandSelectedIndex =
       commandSelectedByCategory[activeCategory.name] ?? 0;

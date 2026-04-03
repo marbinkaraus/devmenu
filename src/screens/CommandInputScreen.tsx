@@ -40,11 +40,17 @@ export function CommandInputScreen({ input, onCancel, onSubmit }: Props) {
     return (
       <ScreenShell
         title="Command Input"
+        bannerTitle
+        titleColor={THEME.banner}
         description="Provide a value for the selected command."
         hint="type · ⏎ submit · Esc cancel"
       >
         <Column>
-          <LabeledCard title={prompt}>
+          <LabeledCard
+            title={prompt}
+            accentColor={THEME.fieldFocusBorder}
+            focused
+          >
             <TextInput
               value={value}
               onChange={(next) => {
@@ -55,6 +61,7 @@ export function CommandInputScreen({ input, onCancel, onSubmit }: Props) {
                 onSubmit(next);
               }}
               placeholder={placeholder}
+              focus
               showCursor
             />
           </LabeledCard>
@@ -72,11 +79,17 @@ export function CommandInputScreen({ input, onCancel, onSubmit }: Props) {
   return (
     <ScreenShell
       title="Command Input"
+      bannerTitle
+      titleColor={THEME.banner}
       description="Provide a value for the selected command."
       hint="Tab newline · ⏎ submit · Esc cancel · ↑↓ lines"
     >
       <Column>
-        <LabeledCard title={prompt}>
+        <LabeledCard
+          title={prompt}
+          accentColor={THEME.fieldFocusBorder}
+          focused
+        >
           <TextArea
             value={value}
             onChange={setValue}
@@ -85,6 +98,7 @@ export function CommandInputScreen({ input, onCancel, onSubmit }: Props) {
               onSubmit(next);
             }}
             placeholder={placeholder}
+            focus
             showCursor
           />
         </LabeledCard>

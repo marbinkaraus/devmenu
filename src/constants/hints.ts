@@ -11,3 +11,5 @@ export const HINT_SEARCH =
 export const HINT_GIT_COMMIT = "⇥ next field · ⏎ newline/enter · Esc cancel";
 
 export const HINT_GIT_COMMIT_REVIEW = "←→ tab · ⏎ enter · Esc cancel · q quit";
+
+export const HINT_CONFIRM_COMMAND = "←→ switch · ⏎ run/cancel · Esc cancel";
