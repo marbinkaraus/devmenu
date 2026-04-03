@@ -12,11 +12,11 @@
   </p>
 
   <p>
-    <a href="#installation">📦 Install</a>
-    · <a href="#getting-started">🚀 Getting started</a>
-    · <a href="#features">✨ Features</a>
-    · <a href="#configure-your-menu">⚙️ Configure</a>
-    · <a href="#usage">⌨️ Usage</a>
+    <a href="https://github.com/marbinkaraus/devmenu#installation">📦 Install</a>
+    · <a href="https://github.com/marbinkaraus/devmenu#getting-started">🚀 Getting started</a>
+    · <a href="https://github.com/marbinkaraus/devmenu#features">✨ Features</a>
+    · <a href="https://github.com/marbinkaraus/devmenu#configure-your-menu">⚙️ Configure</a>
+    · <a href="https://github.com/marbinkaraus/devmenu#usage">⌨️ Usage</a>
   </p>
 
 </div>
@@ -39,6 +39,8 @@
 - **📄 YAML or JSON** — one structured file is your entire menu; **`devmenu init`** copies a commented starter from the package (Git, General, Scripts examples you can trim).
 
 ---
+
+<a id="features"></a>
 
 ## ✨ Features
 
@@ -66,12 +68,16 @@
 
 ---
 
+<a id="requirements"></a>
+
 ## 📋 Requirements
 
 > [!IMPORTANT]
 > **Node.js 20 or newer** is required. The published CLI is plain JavaScript and runs on Node; you don’t need Bun installed to use devmenu from npm.
 
 ---
+
+<a id="installation"></a>
 
 ## 📦 Installation
 
@@ -93,6 +99,8 @@ Clone the repo and follow [Developing](#developing).
 
 ---
 
+<a id="getting-started"></a>
+
 ## 🚀 Getting started
 
 From your project root:
@@ -107,6 +115,8 @@ devmenu               # open the menu — you’re live
 > Prefer JSON? Run **`devmenu init --json`** once. Need to regenerate? **`devmenu init --force`** overwrites the existing file.
 
 ---
+
+<a id="usage"></a>
 
 ## ⌨️ Usage
 
@@ -127,6 +137,8 @@ Run **`devmenu`** in a terminal inside your project.
 | `devmenu init --force` | Overwrite if that file already exists |
 
 ---
+
+<a id="configure-your-menu"></a>
 
 ## ⚙️ Configure your menu
 
@@ -176,6 +188,8 @@ The file devmenu loads is the **complete** menu — the CLI does **not** inject 
 </details>
 
 ---
+
+<a id="developing"></a>
 
 ## 🧑‍💻 Developing
 

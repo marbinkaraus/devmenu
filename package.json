@@ -11,6 +11,7 @@
   "bin": {
     "devmenu": "cli.js"
   },
+  "preferGlobal": true,
   "files": [
     "LICENSE",
     "README.md",
