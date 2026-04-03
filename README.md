@@ -14,13 +14,16 @@
   <p>
     <a href="#installation">Install</a>
     · <a href="#getting-started">Getting started</a>
-    · <a href="#demo">Demo</a>
     · <a href="#features">Features</a>
     · <a href="#configure-your-menu">Configure</a>
     · <a href="#usage">Usage</a>
   </p>
 
 </div>
+
+<p align="center">
+  <img src="media/demo.gif" alt="Screen recording of the devmenu terminal UI" width="720" />
+</p>
 
 ## Why you’ll like it
 
@@ -32,24 +35,6 @@
 - **Learn while you use** — descriptions plus the real shell line, side by side.
 - **Guard the scary stuff** — optional prompts, `{{placeholders}}`, and a confirm step with **your** wording for destructive tasks.
 - **YAML or JSON** — one structured file is your entire menu; **`devmenu init`** copies a commented starter from the package (Git, General, Scripts examples you can trim).
-
-## Demo
-
-<p align="center">
-  <video
-    src="https://raw.githubusercontent.com/marbinkaraus/devmenu/main/media/demo.mp4"
-    controls
-    muted
-    playsinline
-    width="720"
-  >
-    <a href="https://github.com/marbinkaraus/devmenu/blob/main/media/demo.mp4">Play demo.mp4</a>
-  </video>
-</p>
-
-<p align="center">
-  <a href="https://github.com/marbinkaraus/devmenu/blob/main/media/demo.mp4"><code>media/demo.mp4</code></a> — if the player doesn’t load, open on GitHub or download the file.
-</p>
 
 ## Features
 
