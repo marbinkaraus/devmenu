@@ -6,3 +6,4 @@ cli.js
 *.log
 devmenu.yaml
 devmenu.json
+.DS_Store
