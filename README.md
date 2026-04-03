@@ -1,7 +1,7 @@
 <div align="center">
   <img src="media/logo.png" alt="devmenu" width="220" />
 
-  <h3>Your project commands. One pretty menu.</h3>
+  <h3>✨ Your project commands. One pretty menu.</h3>
 
   <p><strong>A terminal UI that’s actually nice to look at</strong> — browse and run categorized shell commands, <strong>search</strong> the whole list, and keep <strong>everything in one place</strong> instead of hunting through <code>package.json</code>, readmes, and random docs. Each entry shows <strong>what it does</strong> and the <strong>exact command</strong>, so you learn without trying.</p>
 
@@ -12,11 +12,11 @@
   </p>
 
   <p>
-    <a href="#installation">Install</a>
-    · <a href="#getting-started">Getting started</a>
-    · <a href="#features">Features</a>
-    · <a href="#configure-your-menu">Configure</a>
-    · <a href="#usage">Usage</a>
+    <a href="#installation">📦 Install</a>
+    · <a href="#getting-started">🚀 Getting started</a>
+    · <a href="#features">✨ Features</a>
+    · <a href="#configure-your-menu">⚙️ Configure</a>
+    · <a href="#usage">⌨️ Usage</a>
   </p>
 
 </div>
@@ -25,41 +25,59 @@
   <img src="media/demo.gif" alt="Screen recording of the devmenu terminal UI" width="720" />
 </p>
 
-## Why you’ll like it
+<p align="center">
+  <a href="https://github.com/marbinkaraus/devmenu/blob/main/media/demo.mp4">
+</p>
 
-- **It’s a TUI** — keyboard-first, fast, stays in your terminal.
-- **It looks good** — polished layout and colors, not a spreadsheet cosplaying as an app.
-- **Dead simple** — pick a category, pick a command, hit Enter. Hints sit on every screen.
-- **Categories + search** — organize commands your way; press **`s`** to filter by name, command text, or tags.
-- **One menu to rule them all** — stop re-opening five files to remember how this repo runs tests or deploys.
-- **Learn while you use** — descriptions plus the real shell line, side by side.
-- **Guard the scary stuff** — optional prompts, `{{placeholders}}`, and a confirm step with **your** wording for destructive tasks.
-- **YAML or JSON** — one structured file is your entire menu; **`devmenu init`** copies a commented starter from the package (Git, General, Scripts examples you can trim).
+---
 
-## Features
+## 🎯 Why you’ll like it
 
-### Browse & search
+- **⌨️ It’s a TUI** — keyboard-first, fast, stays in your terminal.
+- **🪄 It looks good** — polished layout and colors, not a spreadsheet cosplaying as an app.
+- **🎯 Dead simple** — pick a category, pick a command, hit Enter. Hints sit on every screen.
+- **🔍 Categories + search** — organize commands your way; press **`s`** to filter by name, command text, or tags.
+- **📚 One menu to rule them all** — stop re-opening five files to remember how this repo runs tests or deploys.
+- **💡 Learn while you use** — descriptions plus the real shell line, side by side.
+- **🛡️ Guard the scary stuff** — optional prompts, `{{placeholders}}`, and a confirm step with **your** wording for destructive tasks.
+- **📄 YAML or JSON** — one structured file is your entire menu; **`devmenu init`** copies a commented starter from the package (Git, General, Scripts examples you can trim).
+
+---
+
+## ✨ Features
+
+### 🔎 Browse & search
 
 - **Categories** — you define them in config; the shipped examples include **Git**, **General**, and **Scripts** starters you can delete or edit freely.
 - **Search** — **`s`** filters across labels, the command string, and **tags** (tags power search but stay out of your way in lists).
-- **Already live with a task runner?** Keep **`just`**, npm scripts, Make, whatever — devmenu is the **browsable, searchable face** on top, not a replacement for your recipes file.
 
-### Run with guardrails
+> [!TIP]
+> devmenu is the **browsable, searchable face** on top of whatever you already use — keep **`just`**, npm scripts, Make, or other runners; this doesn’t replace them.
+
+### 🛡️ Run with guardrails
 
 - **Inputs** — collect values before run; template them into `command` / `cwd` with `{{name}}`.
 - **Confirm** — optional yes/no with optional **custom** `confirmText` for “are you sure you meant production?” moments.
 - **Git with polish** — nicer flow for commit-style commands where it fits.
 
-### Your menu file
+> [!WARNING]
+> Commands run in a real shell with the privileges of **your** user. Prefer **`confirm`** / **`confirmText`** (and careful `cwd`) for anything that touches production, deletes data, or spends money.
+
+### 📁 Your menu file
 
 - **`devmenu init`** drops a ready-to-edit **`devmenu.yaml`** (or **`devmenu.json`**) from the shipped examples — a full starter menu.
 - **Clear schema** — see the field table under [Configure your menu](#configure-your-menu) and the full commented **`devmenu.example.yaml`** in the package.
 
-## Requirements
+---
 
-- **Node.js** 20 or newer
+## 📋 Requirements
 
-## Installation
+> [!IMPORTANT]
+> **Node.js 20 or newer** is required. The published CLI is plain JavaScript and runs on Node; you don’t need Bun installed to use devmenu from npm.
+
+---
+
+## 📦 Installation
 
 ### npm (global)
 
@@ -77,7 +95,9 @@ npx devmenu
 
 Clone the repo and follow [Developing](#developing).
 
-## Getting started
+---
+
+## 🚀 Getting started
 
 From your project root:
 
@@ -87,11 +107,17 @@ devmenu init          # creates devmenu.yaml from the shipped example (use --jso
 devmenu               # open the menu — you’re live
 ```
 
-Prefer JSON? Run **`devmenu init --json`** once, then **`devmenu`** as usual. Need to regenerate? **`devmenu init --force`** overwrites the file.
+> [!TIP]
+> Prefer JSON? Run **`devmenu init --json`** once. Need to regenerate? **`devmenu init --force`** overwrites the existing file.
 
-## Usage
+---
 
-Run **`devmenu`** in a terminal inside your project. **Controls and shortcuts are shown on the hint row** at the bottom of each screen — nothing to memorize from the readme.
+## ⌨️ Usage
+
+Run **`devmenu`** in a terminal inside your project.
+
+> [!NOTE]
+> **Controls and shortcuts** are shown on the hint row at the bottom of each screen — you don’t have to memorize this README while you work.
 
 ### CLI
 
@@ -104,7 +130,9 @@ Run **`devmenu`** in a terminal inside your project. **Controls and shortcuts ar
 | `devmenu init --json` | Create **`devmenu.json`** instead |
 | `devmenu init --force` | Overwrite if that file already exists |
 
-## Configure your menu
+---
+
+## ⚙️ Configure your menu
 
 **Start with init.** In your project directory, run **`devmenu init`** (or **`devmenu init --json`**). That writes **`devmenu.yaml`** or **`devmenu.json`** next to your work, copied from the package examples — the same flow as [Getting started](#getting-started).
 
@@ -135,19 +163,30 @@ categories:
 Full commented references: **`devmenu.example.yaml`** and **`devmenu.example.json`** (included in the npm package).
 
 <details>
-<summary><strong>Other filenames & merge behavior</strong></summary>
+<summary><strong>📂 Other filenames & discovery</strong></summary>
 
 devmenu can also pick up **`devmenu.yml`**, **`.devmenu.yaml`**, **`.devmenu.yml`**, **`devmenu.json`**, or **`.devmenu.json`**. It walks **up** from the current working directory and uses the **first** matching file in the **nearest** directory that has one. If several of those names exist in the **same** directory, priority is:
 
 `devmenu.yaml` → `devmenu.yml` → `.devmenu.yaml` → `.devmenu.yml` → `devmenu.json` → `.devmenu.json`
 
-Without a config file, the menu is **empty** — run **`devmenu init`** or add **`devmenu.yaml`** / **`devmenu.json`** yourself. The file devmenu loads is the **complete** menu; the CLI does not inject categories or commands.
+> [!CAUTION]
+> Without a config file in that walk, the menu is **empty**. Run **`devmenu init`** or add **`devmenu.yaml`** / **`devmenu.json`** yourself.
+
+The file devmenu loads is the **complete** menu — the CLI does **not** inject categories or commands.
+
+> [!NOTE]
+> Run devmenu from the **project directory you care about** (or a subfolder); discovery starts at the current working directory and moves upward.
 
 </details>
 
-## Developing
+---
+
+## 🧑‍💻 Developing
 
 **Built with [Ink](https://github.com/vadimdemedes/ink)** (React in the terminal). This repo uses [Bun](https://bun.sh) for local TypeScript and for producing the published **`cli.js`**; end users only need **Node**.
+
+> [!TIP]
+> After cloning, **`bun install`** then **`bun run dev`** (or **`bun run devmenu`**) runs the TypeScript entrypoint. **`bun run build`** writes **`cli.js`** (gitignored locally; produced on publish).
 
 ```bash
 bun install
@@ -163,7 +202,7 @@ Layout: **`src/entrypoints/`**, **`src/app/`**, **`src/screens/`**, **`src/confi
 
 <p align="center">
   <br/>
-  <sub><em>Pick a command, run it, ship it.</em></sub><br/>
+  <sub><em>Pick a command, run it, ship it. 🚀</em></sub><br/>
   <sub>MIT · <a href="LICENSE">LICENSE</a></sub><br/><br/>
   <a href="https://github.com/vadimdemedes/ink"><img src="https://img.shields.io/badge/TUI-Ink-b6377d?style=for-the-badge&labelColor=24202C" alt="Ink" /></a>
   <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&labelColor=24202C" alt="React" /></a>
