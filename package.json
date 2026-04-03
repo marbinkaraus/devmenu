@@ -1,7 +1,11 @@
 {
   "name": "devmenu",
-  "version": "0.1.0",
-  "description": "Terminal UI to pick and run categorized dev commands — built-in Git & General, plus optional devmenu.yaml or JSON merged from the project tree.",
+  "version": "1.0.0",
+  "description": "A terminal UI to browse and run categorized shell commands, search the whole list, and keep everything in one place instead of hunting through package.json, readmes, and random docs.",
+  "author": "Marbin Karaus (https://github.com/marbinkaraus)",
+  "homepage": "https://github.com/marbinkaraus/devmenu",
+  "bugs": "https://github.com/marbinkaraus/devmenu/issues",
+  "license": "MIT",
   "type": "module",
   "main": "./cli.js",
   "bin": {
@@ -43,9 +47,10 @@
     "shell",
     "terminal",
     "tui",
-    "yaml"
+    "yaml",
+    "command-browser",
+    "command-picker"
   ],
-  "license": "MIT",
   "dependencies": {
     "chalk": "^5.6.2",
     "figures": "^6.1.0",
