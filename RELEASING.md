@@ -1,6 +1,6 @@
 # Releasing devmenu (Claude Code–style)
 
-Published [`@anthropic-ai/claude-code`](https://www.npmjs.com/package/@anthropic-ai/claude-code) ships a **single bundled `cli.js`**, `bin` → that file, **`engines.node`**, and **`dependencies: {}`**. This repo does the same: **`prepublishOnly` runs `bun run build`**, which emits **`cli.js`** with a **`#!/usr/bin/env node`** shebang.
+This repo ships a **single bundled `cli.js`**, `bin` → that file, **`engines.node`**, and four runtime `dependencies` (`cfonts`, `chalk`, `figures`, `ink-text-input`) that cannot be inlined by the bundler. **`prepublishOnly` runs `bun run build`**, which emits **`cli.js`** with a **`#!/usr/bin/env node`** shebang.
 
 ## One-time setup
 

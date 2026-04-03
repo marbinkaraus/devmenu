@@ -1,5 +1,5 @@
 /**
- * Bundles src/entrypoints/cli.tsx → ./cli.js for npm (Node 18+), like @anthropic-ai/claude-code’s cli.js.
+ * Bundles src/entrypoints/cli.tsx → ./cli.js for npm (Node 20+).
  * Run: bun run scripts/build-cli.ts
  */
 

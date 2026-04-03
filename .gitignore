@@ -5,5 +5,9 @@ cli.js
 *.map
 *.log
 devmenu.yaml
+devmenu.yml
+.devmenu.yaml
+.devmenu.yml
 devmenu.json
+.devmenu.json
 .DS_Store

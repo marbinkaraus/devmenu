@@ -20,4 +20,4 @@ fi
 cp "${PKG_ROOT}/cli.js" "${BIN_DIR}/devmenu"
 chmod +x "${BIN_DIR}/devmenu"
 
-echo "Installed ${BIN_DIR}/devmenu (Node >=18 on PATH). Add ${BIN_DIR} to PATH if needed."
+echo "Installed ${BIN_DIR}/devmenu (Node >=20 on PATH). Add ${BIN_DIR} to PATH if needed."

@@ -10,7 +10,7 @@ Layers, from bottom to top:
 
 2. **Optional ecosystem packages** — npm packages such as `ink-text-input`, `ink-scroll-list`, etc. (see list below). Add them when they match a need; they sit alongside Ink, not inside our UI folder.
 
-3. **`src/ink/primitives/`** — Tiny reusable wrappers around Ink primitives we use repeatedly (for example `Column`, `MutedText`, `SubHeadline`, `ControlHint`, `Spacing`, `SectionTitle`, `CardBorder`, `LabeledCard`, `Button`, `Divider`). Vertical rhythm uses tokens from **`src/constants/spacing.ts`** so margins stay consistent across screens.
+3. **`src/ink/primitives/`** — Tiny reusable wrappers around Ink primitives we use repeatedly (for example `Column`, `MutedText`, `SubHeadline`, `ControlHint`, `Spacing`, `SectionTitle`, `CardBorder` (also exports `LabeledCard`), `Button`, `Divider`). Vertical rhythm uses tokens from **`src/constants/spacing.ts`** so margins stay consistent across screens.
 
 4. **`src/ink/components/`** — Composed UI blocks built from `src/ink/primitives/` and Ink ecosystem packages: header, screen shell (`header -> main -> footer`), `ScrollSelectList` (category/command pickers), and multiline `TextArea`.
 

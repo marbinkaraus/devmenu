@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="media/logo.png" alt="devmenu" width="220" />
+  <img src="https://raw.githubusercontent.com/marbinkaraus/devmenu/main/media/logo.png" alt="devmenu" width="220" />
 
   <h3>✨ Your project commands. One pretty menu.</h3>
 
@@ -22,7 +22,7 @@
 </div>
 
 <p align="center">
-  <img src="media/demo.gif" alt="Screen recording of the devmenu terminal UI" width="720" />
+  <img src="https://raw.githubusercontent.com/marbinkaraus/devmenu/main/media/demo.gif" alt="Screen recording of the devmenu terminal UI" width="720" />
 </p>
 
 ---
