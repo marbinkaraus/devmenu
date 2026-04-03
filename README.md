@@ -31,7 +31,7 @@
 - **One menu to rule them all** — stop re-opening five files to remember how this repo runs tests or deploys.
 - **Learn while you use** — descriptions plus the real shell line, side by side.
 - **Guard the scary stuff** — optional prompts, `{{placeholders}}`, and a confirm step with **your** wording for destructive tasks.
-- **YAML or JSON** — one structured file; ships with **Git** (and friends). Use `devmenu init` to create your own file.
+- **YAML or JSON** — one structured file is your entire menu; **`devmenu init`** copies a commented starter from the package (Git, General, Scripts examples you can trim).
 
 ## Demo
 
@@ -49,7 +49,7 @@
 
 ### Browse & search
 
-- **Categories** — built-in **Git** & **General**; your file adds new groups or **appends** to a matching name.
+- **Categories** — you define them in config; the shipped examples include **Git**, **General**, and **Scripts** starters you can delete or edit freely.
 - **Search** — **`s`** filters across labels, the command string, and **tags** (tags power search but stay out of your way in lists).
 - **Already live with a task runner?** Keep **`just`**, npm scripts, Make, whatever — devmenu is the **browsable, searchable face** on top, not a replacement for your recipes file.
 
@@ -61,7 +61,7 @@
 
 ### Your menu file
 
-- **`devmenu init`** drops a ready-to-edit **`devmenu.yaml`** (or **`devmenu.json`**) from the shipped examples — no copy-paste archaeology in `node_modules`.
+- **`devmenu init`** drops a ready-to-edit **`devmenu.yaml`** (or **`devmenu.json`**) from the shipped examples — a full starter menu.
 - **Clear schema** — see the field table under [Configure your menu](#configure-your-menu) and the full commented **`devmenu.example.yaml`** in the package.
 
 ## Requirements
@@ -150,7 +150,7 @@ devmenu can also pick up **`devmenu.yml`**, **`.devmenu.yaml`**, **`.devmenu.yml
 
 `devmenu.yaml` → `devmenu.yml` → `.devmenu.yaml` → `.devmenu.yml` → `devmenu.json` → `.devmenu.json`
 
-Project entries **merge** with built-in **Git** / **General**: same category name **appends** your commands.
+Without a config file, the menu is **empty** — run **`devmenu init`** or add **`devmenu.yaml`** / **`devmenu.json`** yourself. The file devmenu loads is the **complete** menu; the CLI does not inject categories or commands.
 
 </details>
 

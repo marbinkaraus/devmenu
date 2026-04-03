@@ -40,7 +40,7 @@ export function getCliHelpText(): string {
     "",
     chalk.bold("Configuration"),
     `  ${chalk.dim(
-      "Optional YAML or JSON in a parent directory merges with the default menu.",
+      "YAML or JSON in a parent directory defines your whole menu.",
     )}`,
     `  ${chalk.dim("See")} ${hi("devmenu.example.yaml")} ${chalk.dim("(commented)")} ${chalk.dim("·")} ${hi(
       "devmenu.example.json",

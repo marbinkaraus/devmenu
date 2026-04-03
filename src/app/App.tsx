@@ -17,12 +17,13 @@ import { getGitCommitInputPair } from "../utils/gitCommitInputPair";
 type Props = {
   rootDir: string;
   categories: DevMenuCategory[];
+  hasConfigFile: boolean;
 };
 
 type SearchReturn = "categories" | "commands";
 
 /** Root Ink tree: screen state, command flow, and global key handling. */
-export function App({ rootDir, categories }: Props) {
+export function App({ rootDir, categories, hasConfigFile }: Props) {
   const { exit } = useApp();
   const [screen, setScreen] = useState<MenuScreenId>("categories");
   const [activeCategory, setActiveCategory] = useState<DevMenuCategory | null>(
@@ -281,6 +282,7 @@ export function App({ rootDir, categories }: Props) {
     screenContent = (
       <CategoryPickerScreen
         categories={categories}
+        hasConfigFile={hasConfigFile}
         selectedIndex={categorySelectedIndex}
         onSelectedIndexChange={setCategorySelectedIndex}
         onSelectCategory={(cat) => {

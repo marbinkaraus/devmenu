@@ -39,7 +39,11 @@ if (altScreen) {
 }
 
 const { waitUntilExit } = render(
-  <App rootDir={resolved.rootDir} categories={resolved.categories} />,
+  <App
+    rootDir={resolved.rootDir}
+    categories={resolved.categories}
+    hasConfigFile={resolved.hasConfigFile}
+  />,
 );
 
 await waitUntilExit();

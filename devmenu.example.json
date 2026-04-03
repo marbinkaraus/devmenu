@@ -1,21 +1,77 @@
 {
-  "_comment": "Same schema as YAML. Unknown root keys are ignored. For field docs and merge rules, see README.md and devmenu.example.yaml.",
+  "_comment": "Same schema as devmenu.example.yaml. The CLI ships no default commands — this file is a full starter menu. Run: devmenu init --json. Unknown root keys (like _comment) are ignored by the parser.",
   "categories": [
     {
-      "name": "Scripts",
+      "name": "Git",
       "commands": [
         {
-          "label": "Install deps",
-          "description": "Install project dependencies with Bun.",
-          "command": "bun install"
+          "label": "Status",
+          "description": "Short branch status and working tree.",
+          "command": "git status -sb",
+          "tags": ["git", "status"]
         },
         {
-          "label": "Typecheck",
-          "description": "Run TypeScript type checks without emitting files.",
-          "command": "bun run typecheck"
+          "label": "Diff",
+          "description": "Unstaged changes.",
+          "command": "git diff",
+          "tags": ["git", "diff"]
         },
         {
-          "label": "Git commit",
+          "label": "Diff (staged)",
+          "description": "Staged changes only.",
+          "command": "git diff --staged",
+          "tags": ["git", "diff", "staged"]
+        },
+        {
+          "label": "Pull",
+          "description": "Fetch and merge the current branch.",
+          "command": "git pull",
+          "tags": ["git", "pull", "sync"]
+        },
+        {
+          "label": "Push",
+          "description": "Push the current branch to its remote.",
+          "command": "git push",
+          "tags": ["git", "push", "sync"]
+        },
+        {
+          "label": "Fetch",
+          "description": "Download objects from remote without merging.",
+          "command": "git fetch",
+          "tags": ["git", "fetch"]
+        },
+        {
+          "label": "Recent commits",
+          "description": "Last 15 commits, one line each.",
+          "command": "git log --oneline -15",
+          "tags": ["git", "log", "history"]
+        },
+        {
+          "label": "Branches",
+          "description": "Local branches and upstreams.",
+          "command": "git branch -vv",
+          "tags": ["git", "branch"]
+        },
+        {
+          "label": "Remotes",
+          "description": "Configured remotes and URLs.",
+          "command": "git remote -v",
+          "tags": ["git", "remote"]
+        },
+        {
+          "label": "Stash list",
+          "description": "Saved stashes.",
+          "command": "git stash list",
+          "tags": ["git", "stash"]
+        },
+        {
+          "label": "Add all",
+          "description": "Add all changed files to the index (staging).",
+          "command": "git add .",
+          "tags": ["git", "add"]
+        },
+        {
+          "label": "Commit",
           "description": "Create a commit with subject/body prompts.",
           "command": "git commit -m \"{{subject}}\" -m \"{{body}}\"",
           "inputs": [
@@ -35,6 +91,59 @@
           "confirm": true,
           "confirmText": "Create commit with the entered message?",
           "tags": ["git", "commit"]
+        }
+      ]
+    },
+    {
+      "name": "General",
+      "commands": [
+        {
+          "label": "pwd",
+          "description": "Print working directory.",
+          "command": "pwd",
+          "tags": ["shell", "path"]
+        },
+        {
+          "label": "list (short)",
+          "description": "List files in this directory.",
+          "command": "ls",
+          "tags": ["shell", "files"]
+        },
+        {
+          "label": "list (long)",
+          "description": "Detailed listing with hidden files.",
+          "command": "ls -la",
+          "tags": ["shell", "files"]
+        },
+        {
+          "label": "date",
+          "description": "Current date and time (format is an argument to date).",
+          "command": "date \"{{format}}\"",
+          "confirm": true,
+          "confirmText": "Print current date and time?",
+          "inputs": [
+            {
+              "name": "format",
+              "label": "Date format",
+              "placeholder": "+%F"
+            }
+          ],
+          "tags": ["shell", "date"]
+        }
+      ]
+    },
+    {
+      "name": "Scripts",
+      "commands": [
+        {
+          "label": "Install deps",
+          "description": "Install project dependencies with Bun.",
+          "command": "bun install"
+        },
+        {
+          "label": "Typecheck",
+          "description": "Run TypeScript without emitting files.",
+          "command": "bun run typecheck"
         }
       ]
     }

@@ -6,7 +6,6 @@ import type {
   DevMenuCommand,
   DevMenuInputSpec,
 } from "../types";
-import { getBuiltInCategories } from "./defaults";
 
 /** First match per directory wins; YAML before JSON if both exist. */
 const CONFIG_NAMES = [
@@ -21,6 +20,8 @@ const CONFIG_NAMES = [
 export type ResolvedConfig = {
   rootDir: string;
   configLabel: string;
+  /** False when no `devmenu.{yaml,json}` was found (menu is empty). */
+  hasConfigFile: boolean;
   categories: DevMenuCategory[];
 };
 
@@ -128,27 +129,6 @@ function cloneCategories(cats: DevMenuCategory[]): DevMenuCategory[] {
   }));
 }
 
-export function mergeProjectOntoBuiltIns(
-  builtIn: DevMenuCategory[],
-  project: DevMenuCategory[],
-): DevMenuCategory[] {
-  const result = cloneCategories(builtIn);
-  for (const pc of project) {
-    const match = result.find(
-      (r) => r.name.toLowerCase() === pc.name.toLowerCase(),
-    );
-    if (match) {
-      match.commands.push(...pc.commands.map((cmd) => ({ ...cmd })));
-    } else {
-      result.push({
-        name: pc.name,
-        commands: pc.commands.map((cmd) => ({ ...cmd })),
-      });
-    }
-  }
-  return result;
-}
-
 function loadConfigFile(configPath: string): unknown {
   const text = readFileSync(configPath, "utf8");
   const ext = extname(configPath).toLowerCase();
@@ -191,15 +171,15 @@ function findGitRoot(startDir: string): string | null {
 }
 
 export function resolveMenuConfig(cwd: string): ResolvedConfig {
-  const builtIn = getBuiltInCategories();
   const project = findProjectConfigFile(cwd);
 
   if (!project) {
     const rootDir = findGitRoot(cwd) ?? resolve(cwd);
     return {
       rootDir,
-      configLabel: "built-in only",
-      categories: cloneCategories(builtIn),
+      configLabel: "no devmenu config",
+      hasConfigFile: false,
+      categories: [],
     };
   }
 
@@ -211,12 +191,12 @@ export function resolveMenuConfig(cwd: string): ResolvedConfig {
     throw new Error(`${project.configPath}: ${msg}`);
   }
 
-  const projectCats = parseCategoryList(raw);
-  const categories = mergeProjectOntoBuiltIns(builtIn, projectCats);
+  const categories = cloneCategories(parseCategoryList(raw));
 
   return {
     rootDir: project.rootDir,
     configLabel: project.configPath,
+    hasConfigFile: true,
     categories,
   };
 }

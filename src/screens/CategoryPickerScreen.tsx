@@ -7,6 +7,8 @@ import type { DevMenuCategory } from "../types";
 
 type Props = {
   categories: DevMenuCategory[];
+  /** When false, the list is empty because no config file was found. */
+  hasConfigFile: boolean;
   selectedIndex: number;
   onSelectedIndexChange: (index: number) => void;
   onSelectCategory: (category: DevMenuCategory) => void;
@@ -14,6 +16,7 @@ type Props = {
 
 export function CategoryPickerScreen({
   categories,
+  hasConfigFile,
   selectedIndex,
   onSelectedIndexChange,
   onSelectCategory,
@@ -39,7 +42,11 @@ export function CategoryPickerScreen({
           const cat = categories[i];
           if (cat) onSelectCategory(cat);
         }}
-        emptyMessage="No categories."
+        emptyMessage={
+          hasConfigFile
+            ? "No categories."
+            : 'No config found, please run "devmenu init" to create config file.'
+        }
       />
     </ScreenShell>
   );

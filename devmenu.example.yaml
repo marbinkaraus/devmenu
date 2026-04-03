@@ -1,34 +1,87 @@
-# devmenu — example project overlay (YAML)
+# devmenu — starter menu (YAML)
 #
-# This file merges with built-in "Git" and "General" categories from the tool.
-# - New category names add a full category.
-# - Same name as a built-in (case-insensitive) appends commands to that category.
+# The CLI does not inject any commands. This file (or devmenu.json) is your whole
+# menu: delete categories or entries you do not need, rename sections, add your own.
 #
-# Discovery: walk upward from cwd; first directory that contains any of:
+# Quick start:  devmenu init   → copies this file to devmenu.yaml in the cwd
+#
+# Discovery: walks upward from cwd; first directory containing any of:
 #   devmenu.yaml, devmenu.yml, .devmenu.yaml, .devmenu.yml, devmenu.json, .devmenu.json
-# If both YAML and JSON exist in that directory, YAML is used (first match in the list above).
+# If YAML and JSON both exist in the same folder, the first name in that list wins.
 #
 # Command fields:
 #   label        (string, required)  — list label
-#   command      (string, required) — shell command; {{inputName}} substituted from inputs
-#   description  (string, optional) — details panel
-#   cwd          (string, optional) — working dir relative to config root or absolute
-#   tags         (string[], optional) — only used for search (s), not shown in lists
-#   confirm      (bool, optional)   — ask before run
-#   confirmText  (string, optional) — custom confirm message
-#   inputs       (array, optional)  — each: name (required), label, placeholder, default,
-#                                     required, multiline
+#   command      (string, required)  — shell command; {{inputName}} from inputs
+#   description  (string, optional)  — details panel
+#   cwd          (string, optional)  — working dir relative to config root or absolute
+#   tags         (string[], optional) — search only (press s); not shown in lists
+#   confirm      (bool, optional)    — confirm before run
+#   confirmText  (string, optional)  — custom confirm headline
+#   inputs       (array, optional)   — each: name (required), label, placeholder,
+#                                      default, required, multiline
 #
 categories:
-  - name: Scripts
+  # --- Common git tasks; trim or extend as you like ---
+  - name: Git
     commands:
-      - label: Install deps
-        description: Install project dependencies with Bun.
-        command: bun install
-      - label: Typecheck
-        description: Run TypeScript type checks without emitting files.
-        command: bun run typecheck
-      - label: Git commit
+      - label: Status
+        description: Short branch status and working tree.
+        command: git status -sb
+        tags: [git, status]
+
+      - label: Diff
+        description: Unstaged changes.
+        command: git diff
+        tags: [git, diff]
+
+      - label: Diff (staged)
+        description: Staged changes only.
+        command: git diff --staged
+        tags: [git, diff, staged]
+
+      - label: Pull
+        description: Fetch and merge the current branch.
+        command: git pull
+        tags: [git, pull, sync]
+
+      - label: Push
+        description: Push the current branch to its remote.
+        command: git push
+        tags: [git, push, sync]
+
+      - label: Fetch
+        description: Download objects from remote without merging.
+        command: git fetch
+        tags: [git, fetch]
+
+      - label: Recent commits
+        description: Last 15 commits, one line each.
+        command: git log --oneline -15
+        tags: [git, log, history]
+
+      - label: Branches
+        description: Local branches and upstreams.
+        command: git branch -vv
+        tags: [git, branch]
+
+      - label: Remotes
+        description: Configured remotes and URLs.
+        command: git remote -v
+        tags: [git, remote]
+
+      - label: Stash list
+        description: Saved stashes.
+        command: git stash list
+        tags: [git, stash]
+
+      - label: Add all
+        description: Add all changed files to the index (staging).
+        command: git add .
+        tags: [git, add]
+
+      # Two inputs + optional review step — devmenu uses a dedicated commit UI when
+      # it sees subject + body placeholders like this.
+      - label: Commit
         description: Create a commit with subject/body prompts.
         command: git commit -m "{{subject}}" -m "{{body}}"
         inputs:
@@ -43,3 +96,44 @@ categories:
         confirm: true
         confirmText: Create commit with the entered message?
         tags: [git, commit]
+
+  # --- Handy shell one-offs ---
+  - name: General
+    commands:
+      - label: pwd
+        description: Print working directory.
+        command: pwd
+        tags: [shell, path]
+
+      - label: list (short)
+        description: List files in this directory.
+        command: ls
+        tags: [shell, files]
+
+      - label: list (long)
+        description: Detailed listing with hidden files.
+        command: ls -la
+        tags: [shell, files]
+
+      # {{format}} is passed to date(1); try +%F for ISO date, or leave default.
+      - label: date
+        description: Current date and time (format is an argument to date).
+        command: date "{{format}}"
+        confirm: true
+        confirmText: Print current date and time?
+        inputs:
+          - name: format
+            label: Date format
+            placeholder: "+%F"
+        tags: [shell, date]
+
+  # --- Replace with your project’s scripts (examples below use Bun) ---
+  - name: Scripts
+    commands:
+      - label: Install deps
+        description: Install project dependencies with Bun.
+        command: bun install
+
+      - label: Typecheck
+        description: Run TypeScript without emitting files.
+        command: bun run typecheck
