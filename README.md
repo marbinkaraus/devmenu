@@ -25,10 +25,6 @@
   <img src="media/demo.gif" alt="Screen recording of the devmenu terminal UI" width="720" />
 </p>
 
-<p align="center">
-  <a href="https://github.com/marbinkaraus/devmenu/blob/main/media/demo.mp4">
-</p>
-
 ---
 
 ## 🎯 Why you’ll like it
