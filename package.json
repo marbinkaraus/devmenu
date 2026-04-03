@@ -11,6 +11,7 @@
     "LICENSE",
     "README.md",
     "cli.js",
+    "media",
     "devmenu.example.yaml",
     "devmenu.example.json"
   ],
