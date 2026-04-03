@@ -10,7 +10,8 @@ on:
 
 jobs:
   publish:
-    if: ${{ secrets.NPM_TOKEN != '' }}
+    # Note: `secrets` cannot be used in job-level `if` (GitHub rejects the workflow).
+    # Set repository secret NPM_TOKEN or the final `npm publish` step will fail.
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
