@@ -28,7 +28,8 @@
     "check:fix": "biome check --write .",
     "dev": "bun run src/entrypoints/cli.tsx",
     "devmenu": "bun run src/entrypoints/cli.tsx",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
   },
   "repository": {
     "type": "git",
