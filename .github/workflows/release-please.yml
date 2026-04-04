@@ -1,6 +1,10 @@
 # Creates/updates a "Release PR" from conventional commits on main.
 # When the PR is merged, release-please tags the release and creates a
 # GitHub release — the tag then triggers publish.yml for npm.
+#
+# Use RELEASE_PLEASE_TOKEN (fine-grained or classic PAT with contents + PRs)
+# so the tag/release is not attributed to GITHUB_TOKEN. Pushes from
+# GITHUB_TOKEN do not start other workflows, so publish.yml would never run.
 
 name: Release Please
 
@@ -20,4 +24,5 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # PAT when set; otherwise release PRs still work but tag won't trigger publish.yml
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}

@@ -26,6 +26,11 @@ That's it — no manual `npm version` or `git tag` needed.
 
 1. [Create an npm account](https://www.npmjs.com/signup) and log in: `npm login`.
 2. Set **`NPM_TOKEN`** in GitHub repo secrets (granular automation token or OIDC).
+3. Set **`RELEASE_PLEASE_TOKEN`** to a GitHub [fine-grained PAT](https://github.com/settings/personal-access-tokens/new) (this repo: **Contents** and **Pull requests** read/write) or a classic PAT with `repo`. **Without this**, release-please still uses `GITHUB_TOKEN`, but **tag pushes from that token do not start** `publish.yml`, so npm will not publish automatically. See [GitHub: preventing recursive workflows](https://docs.github.com/en/actions/security-for-github-actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow).
+
+### Recover a release that did not publish
+
+In **Actions → Publish → Run workflow**, enter the tag (e.g. `v1.0.4`). Or push the tag again from your machine: `git push origin v1.0.4` (only if the tag is missing or you need a no-op retry).
 
 ## Manual publish (fallback)
 

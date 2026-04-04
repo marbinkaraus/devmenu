@@ -11,6 +11,12 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to publish (e.g. v1.0.4) — use if the tag was created by GITHUB_TOKEN and did not trigger this workflow"
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -24,6 +30,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/tags/{0}', github.event.inputs.tag) || github.ref }}
 
       - uses: oven-sh/setup-bun@v2
         with:
